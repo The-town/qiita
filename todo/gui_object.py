@@ -25,6 +25,27 @@ class Label(tk.Label):
         self["highlightcolor"] = "blue"
 
 
+class Button(tk.Button):
+    def __init__(self, master=None):
+        tk.Button.__init__(self, master)
+
+        self["height"] = 2
+        self["width"] = 20
+        self["font"] = ("Helvetica", 15)
+
+
+class RefreshButton(Button):
+    def __init__(self, master=None,):
+        Button.__init__(self, master)
+
+
+class Combobox(ttk.Combobox):
+    def __init__(self, master=None):
+        ttk.Combobox.__init__(self, master)
+
+        self["font"] = ("Helvetica", 20)
+
+
 class Text(tk.Text):
     def __init__(self, master=None):
         tk.Text.__init__(self, master)
