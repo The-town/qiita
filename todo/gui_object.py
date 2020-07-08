@@ -32,8 +32,8 @@ class Button(tk.Button):
     def __init__(self, master=None):
         tk.Button.__init__(self, master)
 
-        self["height"] = 2
-        self["width"] = 20
+        self["height"] = 1
+        self["width"] = 10
         self["font"] = ("メイリオ", 15)
 
 

@@ -26,7 +26,7 @@ class TodoDisplay:
         self.refresh_button["command"] = self.refresh
 
         self.combbox = Combobox(master=self.function_frame)
-        self.combbox.grid(column=0, row=0)
+        self.combbox.grid(column=0, row=0, padx=(0,100))
         self.set_value_for_combbox()
 
     def display_todo(self):
