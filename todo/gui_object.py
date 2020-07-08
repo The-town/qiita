@@ -1,6 +1,8 @@
 from tkinter import *
 import tkinter as tk
 import tkinter.ttk as ttk
+import os
+import datetime
 
 
 class Frame(tk.Frame):
@@ -17,12 +19,13 @@ class Label(tk.Label):
     def __init__(self, master=None):
         tk.Label.__init__(self, master)
 
-        self["font"] = ("Helvetica", 11)
+        self["font"] = ("メイリオ", 11)
         self["width"] = 50
-        self["anchor"] = "e"
+        #self["anchor"] = "e"
         self["padx"] = 10
         self["pady"] = 20
-        self["highlightcolor"] = "blue"
+        self["bg"] = "blue"
+        self["fg"] = "white"
 
 
 class Button(tk.Button):
@@ -31,7 +34,7 @@ class Button(tk.Button):
 
         self["height"] = 2
         self["width"] = 20
-        self["font"] = ("Helvetica", 15)
+        self["font"] = ("メイリオ", 15)
 
 
 class RefreshButton(Button):
@@ -43,7 +46,7 @@ class Combobox(ttk.Combobox):
     def __init__(self, master=None):
         ttk.Combobox.__init__(self, master)
 
-        self["font"] = ("Helvetica", 20)
+        self["font"] = ("メイリオ", 20)
 
 
 class Text(tk.Text):
@@ -51,6 +54,7 @@ class Text(tk.Text):
         tk.Text.__init__(self, master)
         self["width"] = 100
         self["height"] = 10
+        self["font"] = ("メイリオ", 12)
 
 
 class Listbox(tk.Listbox):
@@ -62,10 +66,11 @@ class Listbox(tk.Listbox):
         self.pack(side=LEFT, fill=BOTH)
         self["width"] = 100
         self["height"] = 10
-        self["font"] = ("Helvetica", 12)
+        self["font"] = ("メイリオ", 12)
         self.master = master
         self.master_of_detail_text = master_of_detail_text
         self.text = Text(self.master_of_detail_text)
+        self.date_label = Label(self.master_of_detail_text)
 
         scrollbar["command"] = self.yview
         self.bind("<Double-Button-1>", self.show_detail)
@@ -77,7 +82,11 @@ class Listbox(tk.Listbox):
         self.text.destroy()
         self.text = Text(self.master_of_detail_text)
         self.text.insert(END, self.read_detail_of_todo(self.index(ACTIVE)))
-        self.text.pack()
+        self.text.grid(column=0, row=1)
+
+        create_time, update_time = self.get_timestamp_of_path(self.todo_list[self.index(ACTIVE)])
+        self.date_label["text"] = "作成 {0} 更新 {1}".format(create_time, update_time)
+        self.date_label.grid(column=0, row=0)
 
     def set_todo_list(self, todo_list_dict):
         self.todo_list = todo_list_dict
@@ -86,3 +95,10 @@ class Listbox(tk.Listbox):
         path = self.todo_list[index]
         with open(path, encoding="utf_8") as f:
             return f.read()
+
+    def get_timestamp_of_path(self, path):
+        stat_result = os.stat(path)
+        create_time = datetime.datetime.fromtimestamp(stat_result.st_ctime).strftime("%Y/%m/%d %H:%M:%S")
+        update_time = datetime.datetime.fromtimestamp(stat_result.st_mtime).strftime("%Y/%m/%d %H:%M:%S")
+
+        return create_time, update_time
