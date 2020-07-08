@@ -33,8 +33,6 @@ class TodoDisplay:
         todo_list_box_id = 0
         self.todo_list_box_dict = {}
 
-        print(self.combbox.get())
-
         if (self.combbox.get() == "all") or (self.combbox.get() == ""):
             paths = self.todo.search_file()
         else:
@@ -44,6 +42,10 @@ class TodoDisplay:
             for path in paths[key]:
                 insert_statement = " ".join([path.split("\\")[-1].split(".")[0]])
                 self.listbox.insert(todo_list_box_id, insert_statement)
+
+                importance_color = self.todo.search_importance(path.split("\\")[-1].split(".")[0])
+                self.listbox.itemconfig(todo_list_box_id, {'bg': importance_color})
+
                 self.todo_list_box_dict[todo_list_box_id] = path
                 todo_list_box_id = todo_list_box_id + 1
 

@@ -1,7 +1,6 @@
 from operate_file_1 import all_files
-import os
-import linecache
 import configparser
+import re
 
 
 class Todo:
@@ -19,6 +18,19 @@ class Todo:
         for index, dir_name in enumerate(self.dir_names):
             paths[self.dir_name_keys[index]] = list(all_files(dir_name, ";".join(self.patterns)))
         return paths
+
+    def search_importance(self, file_name):
+        pattern = r"\[[{0}]\]".format(
+            "|".join(
+                [key.upper() for key in self.rule_file["Importance_color"].keys()]
+            )
+        )
+        re_pattern = re.compile(pattern)
+        result = re_pattern.search(file_name)
+        if result is None:
+            return self.rule_file["Importance_color"]["default"]
+        else:
+            return self.rule_file["Importance_color"][result.group()[1]]
 
     def limit_search_file(self, dir_name_key):
         paths = {}
