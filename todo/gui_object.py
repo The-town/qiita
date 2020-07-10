@@ -81,6 +81,10 @@ class Listbox(tk.Listbox):
     def show_detail(self, event=None):
         self.text.destroy()
         self.text = Text(self.master_of_detail_text)
+        self.text.tag_config('system_message', background="white", foreground="blue", underline=1)
+        self.text.tag_bind("system_message", "<Double-Button-1>", self.open_with_another_app)
+        self.text.insert(END, self.get_todo_list()[self.index(ACTIVE)], "system_message")
+        self.text.insert(END, "\n")
         self.text.insert(END, self.read_detail_of_todo(self.index(ACTIVE)))
         self.text.grid(column=0, row=1)
 
@@ -90,6 +94,9 @@ class Listbox(tk.Listbox):
 
     def set_todo_list(self, todo_list_dict):
         self.todo_list = todo_list_dict
+
+    def get_todo_list(self):
+        return self.todo_list
 
     def read_detail_of_todo(self, index):
         path = self.todo_list[index]
@@ -102,3 +109,7 @@ class Listbox(tk.Listbox):
         update_time = datetime.datetime.fromtimestamp(stat_result.st_mtime).strftime("%Y/%m/%d %H:%M:%S")
 
         return create_time, update_time
+
+    def open_with_another_app(self, event=None):
+        path = self.get_todo_list()[self.index(ACTIVE)]
+        os.system("start " + path)
