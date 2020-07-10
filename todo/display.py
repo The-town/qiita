@@ -38,16 +38,20 @@ class TodoDisplay:
         else:
             paths = self.todo.limit_search_file(self.combbox.get())
 
-        for key in paths.keys():
-            for path in paths[key]:
-                insert_statement = " ".join([path.split("\\")[-1].split(".")[0]])
-                self.listbox.insert(todo_list_box_id, insert_statement)
+        paths = self.todo.sort_todo(paths, method="importance")
 
-                importance_color = self.todo.search_importance(path.split("\\")[-1].split(".")[0])
-                self.listbox.itemconfig(todo_list_box_id, {'bg': importance_color})
+        for path in paths:
+            metadata_list = self.todo.search_meta_data(path)
+            insert_statement_list = [path.split("\\")[-1].split(".")[0]]
+            insert_statement_list.extend(metadata_list)
+            insert_statement = " ".join(insert_statement_list)
+            self.listbox.insert(todo_list_box_id, insert_statement)
 
-                self.todo_list_box_dict[todo_list_box_id] = path
-                todo_list_box_id = todo_list_box_id + 1
+            importance_color = self.todo.search_importance(path.split("\\")[-1].split(".")[0])
+            self.listbox.itemconfig(todo_list_box_id, {'bg': importance_color})
+
+            self.todo_list_box_dict[todo_list_box_id] = path
+            todo_list_box_id = todo_list_box_id + 1
 
         self.listbox.set_todo_list(self.todo_list_box_dict)
 
