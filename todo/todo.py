@@ -47,6 +47,8 @@ class Todo:
     def sort_todo(self, paths, method):
         if method == "importance":
             return self.sort_importance(paths)
+        elif method == "limit":
+            return self.sort_todo_limit(paths)
 
     def sort_importance(self, paths):
         path_dicts = []
@@ -62,6 +64,22 @@ class Todo:
             path_dicts.append(path_dict)
 
         sorted_path_dicts = sorted(path_dicts, key=lambda x: x["importance"])
+        sorted_paths = [sorted_path_dict["path"] for sorted_path_dict in sorted_path_dicts]
+        return sorted_paths
+
+    def sort_todo_limit(self, paths):
+        path_dicts = []
+        for path in paths:
+            path_dict = {}
+            first_metadata = self.search_meta_data(path)[0]
+            if self.rule_file["Meta_data"]["1"] in first_metadata:
+                path_dict["metadata_todo_limit"] = first_metadata.split(":")[-1]
+            else:
+                path_dict["metadata_todo_limit"] = "9999/12/31"
+            path_dict["path"] = path
+            path_dicts.append(path_dict)
+
+        sorted_path_dicts = sorted(path_dicts, key=lambda x: x["metadata_todo_limit"])
         sorted_paths = [sorted_path_dict["path"] for sorted_path_dict in sorted_path_dicts]
         return sorted_paths
 
