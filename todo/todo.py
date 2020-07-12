@@ -2,6 +2,7 @@ from operate_file_1 import all_files
 import configparser
 import re
 import linecache
+import datetime
 
 
 class Todo:
@@ -13,6 +14,8 @@ class Todo:
         self.dir_name_keys = list(self.rule_file["Dir_names"].keys())
         self.dir_names = [self.rule_file["Dir_names"][key] for key in self.rule_file["Dir_names"].keys()]
         self.patterns = [self.rule_file["File_names"][key] for key in self.rule_file["File_names"].keys()]
+
+        self.todo_status = {}
 
     def search_file(self):
         paths = []
@@ -92,6 +95,24 @@ class Todo:
         re_pattern = re.compile(pattern)
         result = re_pattern.search(file_name)
         return result
+
+    def start_todo(self, path):
+        with open("./info_of_todo.log", "a", encoding="utf_8") as f:
+            f.writelines(" ".join([path, "start", datetime.datetime.now().strftime("%Y%m%d-%H:%M:%S"), "\n"]))
+        self.set_todo_status(path, "start")
+
+    def stop_todo(self, path):
+        with open("./info_of_todo.log", "a", encoding="utf_8") as f:
+            f.writelines(" ".join([path, "stop", datetime.datetime.now().strftime("%Y%m%d-%H:%M:%S"), "\n"]))
+        self.set_todo_status(path, "stop")
+
+    def set_todo_status(self, path, status):
+        self.todo_status[path] = status
+
+    def get_todo_status(self, path):
+        if path in self.todo_status.keys():
+            return self.todo_status[path]
+        return "stop"
 
     def get_dir_name_keys(self):
         return self.dir_name_keys

@@ -21,7 +21,6 @@ class Label(tk.Label):
 
         self["font"] = ("メイリオ", 11)
         self["width"] = 50
-        #self["anchor"] = "e"
         self["padx"] = 10
         self["pady"] = 20
         self["bg"] = "blue"
@@ -86,7 +85,7 @@ class Listbox(tk.Listbox):
         self.text.insert(END, self.get_todo_list()[self.index(ACTIVE)], "system_message")
         self.text.insert(END, "\n")
         self.text.insert(END, self.read_detail_of_todo(self.index(ACTIVE)))
-        self.text.grid(column=0, row=1)
+        self.text.grid(column=0, row=1, columnspan=3)
 
         create_time, update_time = self.get_timestamp_of_path(self.todo_list[self.index(ACTIVE)])
         self.date_label["text"] = "作成 {0} 更新 {1}".format(create_time, update_time)
@@ -109,6 +108,9 @@ class Listbox(tk.Listbox):
         update_time = datetime.datetime.fromtimestamp(stat_result.st_mtime).strftime("%Y/%m/%d %H:%M:%S")
 
         return create_time, update_time
+
+    def get_path_of_active_todo(self):
+        return self.todo_list[self.index(ACTIVE)]
 
     def open_with_another_app(self, event=None):
         path = self.get_todo_list()[self.index(ACTIVE)]
