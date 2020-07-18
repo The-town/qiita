@@ -66,7 +66,9 @@ class TodoDisplay:
             todo_progress = get_todo_progress(path)
             insert_statement_list = [path.split("\\")[-1].split(".")[0]]
             insert_statement_list.extend(metadata_list)
-            insert_statement_list.insert(0, "【{0}】".format(todo_progress))
+            insert_statement_list.insert(0, "{0}時間{1}分{2}秒  ".format(
+                int(todo_progress) // 3600, int(todo_progress) // 60, int(todo_progress)
+            ))
             insert_statement_list.insert(0, "【{0}】".format(todo_status))
             insert_statement = " ".join(insert_statement_list)
             self.listbox.insert(todo_list_box_id, insert_statement)
