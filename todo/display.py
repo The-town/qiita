@@ -3,6 +3,7 @@ from tkinter import messagebox
 import tkinter as tk
 from todo import Todo
 from gui_object import Frame, Label, Listbox, Text, Button, Combobox
+from make_todo_progress_main import get_todo_progress
 
 
 class TodoDisplay:
@@ -62,8 +63,10 @@ class TodoDisplay:
         for path in paths:
             metadata_list = self.todo.search_meta_data(path)
             todo_status = self.todo.get_todo_status(path)
+            todo_progress = get_todo_progress(path)
             insert_statement_list = [path.split("\\")[-1].split(".")[0]]
             insert_statement_list.extend(metadata_list)
+            insert_statement_list.insert(0, "【{0}】".format(todo_progress))
             insert_statement_list.insert(0, "【{0}】".format(todo_status))
             insert_statement = " ".join(insert_statement_list)
             self.listbox.insert(todo_list_box_id, insert_statement)
