@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import os
 import datetime
+import subprocess
 
 
 class Frame(tk.Frame):
@@ -80,10 +81,16 @@ class Listbox(tk.Listbox):
     def show_detail(self, event=None):
         self.text.destroy()
         self.text = Text(self.master_of_detail_text)
-        self.text.tag_config('system_message', background="white", foreground="blue", underline=1)
-        self.text.tag_bind("system_message", "<Double-Button-1>", self.open_with_another_app)
-        self.text.insert(END, self.get_todo_list()[self.index(ACTIVE)], "system_message")
+        self.text.tag_config('system_message_file_path', background="white", foreground="blue", underline=1)
+        self.text.tag_config('system_message_folder_path', background="white", foreground="blue", underline=1)
+        self.text.tag_bind("system_message_file_path", "<Double-Button-1>", self.open_with_another_app)
+        self.text.tag_bind("system_message_folder_path", "<Double-Button-1>", self.open_folder)
+        self.text.insert(END, self.todo_list[self.index(ACTIVE)])
         self.text.insert(END, "\n")
+        self.text.insert(END, "ファイルを開く", "system_message_file_path")
+        self.text.insert(END, "\t\t")
+        self.text.insert(END, "フォルダを開く", "system_message_folder_path")
+        self.text.insert(END, "\n\n")
         self.text.insert(END, self.read_detail_of_todo(self.index(ACTIVE)))
         self.text.grid(column=0, row=1, columnspan=3)
 
@@ -115,3 +122,7 @@ class Listbox(tk.Listbox):
     def open_with_another_app(self, event=None):
         path = self.get_todo_list()[self.index(ACTIVE)]
         os.system("start " + path)
+
+    def open_folder(self, event=None):
+        path = "\\".join(self.get_todo_list()[self.index(ACTIVE)].split("\\")[:-1])
+        subprocess.run("explorer {0}".format(path))
