@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter as tk
 import tkinter.ttk as ttk
+import tkinter.scrolledtext as scrolledtext
 import os
 import datetime
 import subprocess
@@ -49,9 +50,9 @@ class Combobox(ttk.Combobox):
         self["font"] = ("メイリオ", 20)
 
 
-class Text(tk.Text):
+class Text(scrolledtext.ScrolledText):
     def __init__(self, master=None):
-        tk.Text.__init__(self, master)
+        scrolledtext.ScrolledText.__init__(self, master)
         self["width"] = 100
         self["height"] = 10
         self["font"] = ("メイリオ", 12)
@@ -73,7 +74,7 @@ class Listbox(tk.Listbox):
         self.date_label = Label(self.master_of_detail_text)
 
         scrollbar["command"] = self.yview
-        self.bind("<Button-1>", self.show_detail)
+        self.bind("<Double-Button-1>", self.show_detail)
         self.bind("<Return>", self.show_detail)
 
         self.todo_list = {}
