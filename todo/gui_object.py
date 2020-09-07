@@ -73,7 +73,7 @@ class Listbox(tk.Listbox):
         self.date_label = Label(self.master_of_detail_text)
 
         scrollbar["command"] = self.yview
-        self.bind("<Double-Button-1>", self.show_detail)
+        self.bind("<Button-1>", self.show_detail)
         self.bind("<Return>", self.show_detail)
 
         self.todo_list = {}
