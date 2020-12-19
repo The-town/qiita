@@ -18,6 +18,12 @@ class Todo:
 
         self.todo_status = {}
 
+    def get_paths_which_result_of_search(self, directory_name):
+        if directory_name == "all" or directory_name == "":
+            return self.search_file()
+        else:
+            return self.limit_search_file(directory_name)
+
     def search_file(self):
         paths = []
         for dir_name in self.dir_names:
@@ -49,7 +55,9 @@ class Todo:
             return [""]
 
     def sort_todo(self, paths, method):
-        if method == "importance":
+        if method == "":
+            return paths
+        elif method == "importance":
             return self.sort_importance(paths)
         elif method == "limit":
             return self.sort_todo_limit(paths)

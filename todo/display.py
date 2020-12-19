@@ -49,16 +49,7 @@ class TodoDisplay:
     def display_todo(self):
         todo_list_box_id = 0
         self.todo_list_box_dict = {}
-
-        if (self.dir_combbox.get() == "all") or (self.dir_combbox.get() == ""):
-            paths = self.todo.search_file()
-        else:
-            paths = self.todo.limit_search_file(self.dir_combbox.get())
-
-        if self.sort_combbox.get() == "":
-            pass
-        else:
-            paths = self.todo.sort_todo(paths, method=self.sort_combbox.get())
+        paths = self.get_paths_which_todo_file_have()
 
         for path in paths:
             metadata_list = self.todo.search_meta_data(path)
@@ -80,6 +71,12 @@ class TodoDisplay:
             todo_list_box_id = todo_list_box_id + 1
 
         self.listbox.set_todo_list(self.todo_list_box_dict)
+
+    def get_paths_which_todo_file_have(self):
+        paths = self.todo.get_paths_which_result_of_search(self.dir_combbox.get())
+        sorted_paths = self.todo.sort_todo(paths, method=self.sort_combbox.get())
+
+        return sorted_paths
 
     def refresh(self, event=None):
         self.listbox.delete(0, "end")
