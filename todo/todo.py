@@ -1,4 +1,4 @@
-from operate_file_1 import all_files
+from operate_file_1 import get_all_files
 import configparser
 import re
 import linecache
@@ -21,11 +21,11 @@ class Todo:
     def search_file(self):
         paths = []
         for dir_name in self.dir_names:
-            paths.extend(list(all_files(dir_name, ";".join(self.patterns))))
+            paths.extend(list(get_all_files(dir_name, ";".join(self.patterns))))
         return paths
 
     def limit_search_file(self, dir_name_key):
-        paths = list(all_files(self.rule_file["Dir_names"][dir_name_key], ";".join(self.patterns)))
+        paths = list(get_all_files(self.rule_file["Dir_names"][dir_name_key], ";".join(self.patterns)))
         return paths
 
     def search_importance(self, file_name):

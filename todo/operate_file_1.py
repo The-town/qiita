@@ -4,7 +4,7 @@ import fnmatch
 #patterns:unixのシェル形式のワイルドカードへ対応。ファイル名のパターン
 #yeild_folders:サブディレクトリ配下のファイルを読み込むかどうか。
 
-def all_files(root, patterns = "*", single_level=False, yeild_folders=False):
+def get_all_files(root, patterns = "*", single_level=False, yeild_folders=False):
 #split:";"でパターンを複数指定できる。;はパターンに入れられない。
     patterns = patterns.split(";")
 
