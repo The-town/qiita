@@ -27,7 +27,7 @@ class MakeTodoProgress:
         date_time_list = [datetime.datetime.strptime(str(time), date_time_format) for time in list]
         return date_time_list
 
-    def get_delta_datetime_list(self, todo_start_time_series, todo_stop_time_series):
+    def get_sum_of_delta_datetime_list(self, todo_start_time_series, todo_stop_time_series):
         todo_start_time_date_time = self.convert_series_to_datetime(todo_start_time_series, "%Y%m%d%H%M%S")
         todo_stop_time_date_time = self.convert_series_to_datetime(todo_stop_time_series, "%Y%m%d%H%M%S")
         self.delta_datetime_list = []

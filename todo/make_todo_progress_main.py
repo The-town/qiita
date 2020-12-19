@@ -10,4 +10,4 @@ def get_todo_progress(path):
     todo_start_time_series = todo_info.query("status == 'start'")["timestamp"]
     todo_stop_time_series = todo_info.query("status == 'stop'")["timestamp"]
 
-    return make_graph_todo_progress.get_delta_datetime_list(todo_start_time_series, todo_stop_time_series)
+    return make_graph_todo_progress.get_sum_of_delta_datetime_list(todo_start_time_series, todo_stop_time_series)
