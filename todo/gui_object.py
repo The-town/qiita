@@ -58,6 +58,14 @@ class Text(scrolledtext.ScrolledText):
         self["font"] = ("メイリオ", 12)
 
 
+class TextForDisplayDetail(Text):
+    def __init__(self, master=None):
+        Text.__init__(self, master)
+
+        self.tag_config('system_message_file_path', background="white", foreground="blue", underline=1)
+        self.tag_config('system_message_folder_path', background="white", foreground="blue", underline=1)
+
+
 class Listbox(tk.Listbox):
     def __init__(self, master=None, master_of_detail_text=None):
         scrollbar = Scrollbar(master)
@@ -70,7 +78,7 @@ class Listbox(tk.Listbox):
         self["font"] = ("メイリオ", 12)
         self.master = master
         self.master_of_detail_text = master_of_detail_text
-        self.text = Text(self.master_of_detail_text)
+        self.text = TextForDisplayDetail(self.master_of_detail_text)
         self.date_label = Label(self.master_of_detail_text)
 
         scrollbar["command"] = self.yview
@@ -81,11 +89,12 @@ class Listbox(tk.Listbox):
 
     def show_detail(self, event=None):
         self.text.destroy()
-        self.text = Text(self.master_of_detail_text)
-        self.text.tag_config('system_message_file_path', background="white", foreground="blue", underline=1)
-        self.text.tag_config('system_message_folder_path', background="white", foreground="blue", underline=1)
+        self.text = TextForDisplayDetail(self.master_of_detail_text)
         self.text.tag_bind("system_message_file_path", "<Double-Button-1>", self.open_with_another_app)
         self.text.tag_bind("system_message_folder_path", "<Double-Button-1>", self.open_folder)
+        create_time, update_time = self.get_timestamp_of_path(self.todo_list[self.index(ACTIVE)])
+        self.text.insert(END, "作成 {0} 更新 {1}".format(create_time, update_time))
+        self.text.insert(END, "\n")
         self.text.insert(END, self.todo_list[self.index(ACTIVE)])
         self.text.insert(END, "\n")
         self.text.insert(END, "ファイルを開く", "system_message_file_path")
@@ -94,10 +103,6 @@ class Listbox(tk.Listbox):
         self.text.insert(END, "\n\n")
         self.text.insert(END, self.read_detail_of_todo(self.index(ACTIVE)))
         self.text.grid(column=0, row=1, columnspan=3)
-
-        create_time, update_time = self.get_timestamp_of_path(self.todo_list[self.index(ACTIVE)])
-        self.date_label["text"] = "作成 {0} 更新 {1}".format(create_time, update_time)
-        self.date_label.grid(column=0, row=0)
 
     def set_todo_list(self, todo_list_dict):
         self.todo_list = todo_list_dict
