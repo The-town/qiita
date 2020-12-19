@@ -4,6 +4,7 @@ import tkinter as tk
 from todo import Todo
 from gui_object import Frame, Label, Listbox, Text, Button, Combobox
 from make_todo_progress_main import get_todo_progress
+from flatten import flatten
 
 
 class TodoDisplay:
@@ -52,17 +53,9 @@ class TodoDisplay:
         paths = self.get_paths_which_todo_file_have()
 
         for path in paths:
-            metadata_list = self.todo.search_meta_data(path)
-            todo_status = self.todo.get_todo_status(path)
-            todo_progress = get_todo_progress(path)
-            insert_statement_list = [path.split("\\")[-1].split(".")[0]]
-            insert_statement_list.extend(metadata_list)
-            insert_statement_list.insert(0, "{0}時間{1}分{2}秒  ".format(
-                int(todo_progress) // 3600, (int(todo_progress) % 3600) // 60, (int(todo_progress) % 3600) % 60
-            ))
-            insert_statement_list.insert(0, "【{0}】".format(todo_status))
-            insert_statement = " ".join(insert_statement_list)
-            self.listbox.insert(todo_list_box_id, insert_statement)
+            todo_information = self.get_info_which_todo_have(path)
+            contents_to_display = self.get_contents_to_display_which_todo_have(todo_information)
+            self.listbox.insert(todo_list_box_id, contents_to_display)
 
             importance_color = self.todo.search_importance(path.split("\\")[-1].split(".")[0])
             self.listbox.itemconfig(todo_list_box_id, {'bg': importance_color})
@@ -77,6 +70,38 @@ class TodoDisplay:
         sorted_paths = self.todo.sort_todo(paths, method=self.sort_combbox.get())
 
         return sorted_paths
+
+    def get_info_which_todo_have(self, todo_file_path):
+        metadata_list = self.todo.search_meta_data(todo_file_path)
+        todo_status = self.todo.get_todo_status(todo_file_path)
+        todo_progress = get_todo_progress(todo_file_path)
+        todo_file_name = [todo_file_path.split("\\")[-1].split("."[0])]
+
+        todo_information = {
+            "metadata_list": metadata_list,
+            "status": todo_status,
+            "progress_hour": int(todo_progress) // 3600,
+            "progress_minutes": (int(todo_progress) % 3600) // 60,
+            "progress_seconds": (int(todo_progress) % 3600) % 60,
+            "file_name": todo_file_name
+        }
+
+        return todo_information
+
+    def get_contents_to_display_which_todo_have(self, todo_information):
+        content_list = [
+            "【{0}】".format(todo_information["status"]),
+            "{0}時間{1}分{2}秒".format(
+                todo_information["progress_hour"],
+                todo_information["progress_minutes"],
+                todo_information["progress_seconds"]
+            ),
+            todo_information["file_name"],
+            todo_information["metadata_list"],
+        ]
+
+        return " ".join(flatten(content_list))
+
 
     def refresh(self, event=None):
         self.listbox.delete(0, "end")
