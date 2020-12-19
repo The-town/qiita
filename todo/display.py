@@ -57,7 +57,7 @@ class TodoDisplay:
             contents_to_display = self.get_contents_to_display_which_todo_have(todo_information)
             self.listbox.insert(todo_list_box_id, contents_to_display)
 
-            importance_color = self.todo.search_importance(path.split("\\")[-1].split(".")[0])
+            importance_color = self.todo.search_importance(todo_information["file_name"])
             self.listbox.itemconfig(todo_list_box_id, {'bg': importance_color})
 
             self.todo_list_box_dict[todo_list_box_id] = path
@@ -75,7 +75,7 @@ class TodoDisplay:
         metadata_list = self.todo.search_meta_data(todo_file_path)
         todo_status = self.todo.get_todo_status(todo_file_path)
         todo_progress = get_todo_progress(todo_file_path)
-        todo_file_name = [todo_file_path.split("\\")[-1].split("."[0])]
+        todo_file_name = todo_file_path.split("\\")[-1].split(".")[0]
 
         todo_information = {
             "metadata_list": metadata_list,
