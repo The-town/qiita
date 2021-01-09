@@ -44,6 +44,10 @@ class Todo:
     def search_meta_data(self, path):
         linecache.clearcache()
         first_line = linecache.getline(path, 1)
+
+        if "" == first_line:
+            return [""]
+
         if "#" == first_line[0]:
             metadata_list = first_line[1:].split(" ")[:len(self.rule_file["Meta_data"].keys())]
             display_metadata_list = []
