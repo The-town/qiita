@@ -109,38 +109,6 @@ class Todo:
         result = re_pattern.search(file_name)
         return result
 
-    def start_todo(self, path):
-        print(path)
-        with open("./info_of_todo.log", "a", encoding="utf_8") as f:
-            f.writelines(" ".join([hashlib.sha256(path.encode()).hexdigest(),
-                                   path,
-                                   "start",
-                                   "{0} {1} {2}".format(
-                                       datetime.datetime.now().year,
-                                       datetime.datetime.now().month,
-                                       datetime.datetime.now().day
-                                   ),
-                                   datetime.datetime.now().strftime("%Y%m%d%H%M%S") + "\n",
-                                   ]))
-        self.set_todo_status(path, "start")
-
-    def stop_todo(self, path):
-        with open("./info_of_todo.log", "a", encoding="utf_8") as f:
-            f.writelines(" ".join([hashlib.sha256(path.encode()).hexdigest(),
-                                   path,
-                                   "stop",
-                                   "{0} {1} {2}".format(
-                                       datetime.datetime.now().year,
-                                       datetime.datetime.now().month,
-                                       datetime.datetime.now().day
-                                   ),
-                                   datetime.datetime.now().strftime("%Y%m%d%H%M%S") + "\n"
-                                   ]))
-        self.set_todo_status(path, "stop")
-
-    def set_todo_status(self, path, status):
-        self.todo_status[path] = status
-
     def get_todo_status(self, path):
         if path in self.todo_status.keys():
             return self.todo_status[path]

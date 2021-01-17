@@ -2,7 +2,7 @@
     このコードはtodoにかけた時間を測定するために使用していたが、
     要件が変更となり、todoにかけた時間を測定しなくなった。
     そのため現在（2021/01/17）は使用していない。
-""" 
+"""
 
 from make_todo_progress import MakeTodoProgress
 
