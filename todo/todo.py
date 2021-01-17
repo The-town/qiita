@@ -16,8 +16,6 @@ class Todo:
         self.dir_names = [self.rule_file["Dir_names"][key] for key in self.rule_file["Dir_names"].keys()]
         self.patterns = [self.rule_file["File_names"][key] for key in self.rule_file["File_names"].keys()]
 
-        self.todo_status = {}
-
     def get_paths_which_result_of_search(self, directory_name):
         if directory_name == "all" or directory_name == "":
             return self.search_file()
