@@ -62,7 +62,6 @@ class TodoDisplay:
 
     def get_info_which_todo_have(self, todo_file_path):
         metadata_list = self.todo.search_meta_data(todo_file_path)
-        todo_status = self.todo.get_todo_status(todo_file_path)
         todo_file_name = todo_file_path.split("\\")[-1].split(".")[0]
 
         todo_information = {
