@@ -3,7 +3,6 @@ from tkinter import messagebox
 import tkinter as tk
 from todo import Todo
 from gui_object import Frame, Label, Listbox, Text, Button, Combobox
-from make_todo_progress_main import get_todo_progress
 from flatten import flatten
 
 
@@ -23,16 +22,6 @@ class TodoDisplay:
         self.function_frame.grid(column=0, row=0)
 
         self.listbox = Listbox(master=self.todo_list_frame, master_of_detail_text=self.todo_detail_frame)
-
-        self.start_todo_button = Button(master=self.todo_detail_frame)
-        self.start_todo_button["text"] = "開始"
-        self.start_todo_button["command"] = self.start_todo
-        self.start_todo_button.grid(column=1, row=0)
-
-        self.stop_todo_button = Button(master=self.todo_detail_frame)
-        self.stop_todo_button["text"] = "終了"
-        self.stop_todo_button["command"] = self.stop_todo
-        self.stop_todo_button.grid(column=2, row=0)
 
         self.refresh_button = Button(master=self.function_frame)
         self.refresh_button.grid(column=2, row=0)
@@ -74,15 +63,10 @@ class TodoDisplay:
     def get_info_which_todo_have(self, todo_file_path):
         metadata_list = self.todo.search_meta_data(todo_file_path)
         todo_status = self.todo.get_todo_status(todo_file_path)
-        todo_progress = get_todo_progress(todo_file_path)
         todo_file_name = todo_file_path.split("\\")[-1].split(".")[0]
 
         todo_information = {
             "metadata_list": metadata_list,
-            "status": todo_status,
-            "progress_hour": int(todo_progress) // 3600,
-            "progress_minutes": (int(todo_progress) % 3600) // 60,
-            "progress_seconds": (int(todo_progress) % 3600) % 60,
             "file_name": todo_file_name
         }
 
@@ -90,18 +74,11 @@ class TodoDisplay:
 
     def get_contents_to_display_which_todo_have(self, todo_information):
         content_list = [
-            "【{0}】".format(todo_information["status"]),
-            "{0}時間{1}分{2}秒".format(
-                todo_information["progress_hour"],
-                todo_information["progress_minutes"],
-                todo_information["progress_seconds"]
-            ),
             todo_information["file_name"],
             todo_information["metadata_list"],
         ]
 
         return " ".join(flatten(content_list))
-
 
     def refresh(self, event=None):
         self.listbox.delete(0, "end")
@@ -112,24 +89,6 @@ class TodoDisplay:
 
     def set_value_for_sort_combbox(self):
         self.sort_combbox["value"] = ["importance", "limit"]
-
-    def start_todo(self, event=None):
-        path = self.listbox.get_path_of_active_todo()
-        if self.todo.get_todo_status(path) == "stop":
-            self.todo.start_todo(path)
-            messagebox.showinfo(title="開始" ,message="{0}を開始します。".format(path.split("\\")[-1]))
-            self.refresh()
-        else:
-            messagebox.showerror(title="エラー", message="{0}は既に開始しています。".format(path.split("\\")[-1]))
-
-    def stop_todo(self, event=None):
-        path = self.listbox.get_path_of_active_todo()
-        if self.todo.get_todo_status(path) == "start":
-            self.todo.stop_todo(self.listbox.get_path_of_active_todo())
-            messagebox.showinfo(title="終了", message="{0}を終了します。".format(path.split("\\")[-1]))
-            self.refresh()
-        else:
-            messagebox.showerror(title="エラー", message="{0}はまだ開始していません。".format(path.split("\\")[-1]))
 
     def mainloop(self):
         self.root.mainloop()
