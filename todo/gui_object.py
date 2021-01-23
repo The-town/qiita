@@ -82,13 +82,16 @@ class Listbox(tk.Listbox):
         self.date_label = Label(self.master_of_detail_text)
 
         scrollbar["command"] = self.yview
-        self.bind("<Double-Button-1>", self.show_detail)
+        self.bind("<Button-1>", self.show_detail)
         self.bind("<Return>", self.show_detail)
 
         self.todo_list = {}
 
     def show_detail(self, event=None):
+        self.activate_line_clicked(event=event)
+
         self.text.destroy()
+
         self.text = TextForDisplayDetail(self.master_of_detail_text)
         self.text.tag_bind("system_message_file_path", "<Double-Button-1>", self.open_with_another_app)
         self.text.tag_bind("system_message_folder_path", "<Double-Button-1>", self.open_folder)
@@ -132,3 +135,10 @@ class Listbox(tk.Listbox):
     def open_folder(self, event=None):
         path = "\\".join(self.get_todo_list()[self.index(ACTIVE)].split("\\")[:-1])
         subprocess.run("explorer {0}".format(path))
+
+    # 選択された行をactive状態にするメソッド
+    # シングルクリックの場合にactive状態へ遷移させるために実装した
+    def activate_line_clicked(self, event=None):
+        self.selection_clear(0, tk.END)
+        self.selection_set(self.nearest(event.y))
+        self.activate(self.nearest(event.y))
