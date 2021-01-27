@@ -88,7 +88,9 @@ class Listbox(tk.Listbox):
         self.todo_list = {}
 
     def show_detail(self, event=None):
-        self.activate_line_clicked(event=event)
+
+        if str(event.type) == "ButtonPress":
+            self.activate_line_clicked(event=event)
 
         self.text.destroy()
 
