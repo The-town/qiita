@@ -1,8 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import filedialog, simpledialog
 import tkinter as tk
 from todo import Todo
-from gui_object import Frame, Label, Listbox, Text, Button, Combobox
+from gui_object import Frame, Label, Listbox, Text, Button, Combobox, DialogForAddTodo
 from flatten import flatten
 
 
@@ -22,6 +23,11 @@ class TodoDisplay:
         self.function_frame.grid(column=0, row=0)
 
         self.listbox = Listbox(master=self.todo_list_frame, master_of_detail_text=self.todo_detail_frame)
+
+        self.add_todo_button = Button(master=self.function_frame)
+        self.add_todo_button.grid(column=3, row=0)
+        self.add_todo_button["text"] = "TODO追加"
+        self.add_todo_button["command"] = self.add_todo
 
         self.refresh_button = Button(master=self.function_frame)
         self.refresh_button.grid(column=2, row=0)
@@ -83,8 +89,12 @@ class TodoDisplay:
         self.listbox.delete(0, "end")
         self.display_todo()
 
+    def add_todo(self, event=None):
+        dir_names_items: dict = self.todo.dir_names_items
+        DialogForAddTodo(self.root, items_for_combobox=dir_names_items)
+
     def set_value_for_dir_combbox(self):
-        self.dir_combbox["value"] = ["all"] + [dir_name.split("\\")[-1] for dir_name in self.todo.get_dir_name_keys()]
+        self.dir_combbox["value"] = ["all"] + self.todo.get_dir_name_keys()
 
     def set_value_for_sort_combbox(self):
         self.sort_combbox["value"] = ["importance", "limit"]

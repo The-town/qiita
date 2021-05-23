@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import simpledialog
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.scrolledtext as scrolledtext
@@ -56,6 +57,14 @@ class Text(scrolledtext.ScrolledText):
         self["width"] = 100
         self["height"] = 10
         self["font"] = ("メイリオ", 12)
+
+
+class Entry(ttk.Entry):
+    def __init__(self, master=None):
+        ttk.Entry.__init__(self, master)
+
+        self["font"] = ("メイリオ", 11)
+        self["width"] = 25
 
 
 class TextForDisplayDetail(Text):
@@ -144,3 +153,39 @@ class Listbox(tk.Listbox):
         self.selection_clear(0, tk.END)
         self.selection_set(self.nearest(event.y))
         self.activate(self.nearest(event.y))
+
+
+class DialogForAddTodo(simpledialog.Dialog):
+    def __init__(self, master, items_for_combobox, title=None) -> None:
+        self.items_for_combobox: dict = items_for_combobox
+        simpledialog.Dialog.__init__(self, parent=master)
+
+    def body(self, master) -> None:
+
+        discription_combobox_label: Label = Label(master)
+        discription_combobox_label["text"] = "カテゴリを選択"
+        discription_combobox_label["width"] = 25
+        discription_combobox_label["fg"] = "black"
+        discription_combobox_label["bg"] = "white"
+        discription_combobox_label.grid(column=0, row=0)
+
+        self.category: Combobox = Combobox(master)
+        self.category["font"] = ("メイリオ", 11)
+        self.category["value"] = list(self.items_for_combobox.keys())
+        self.category.grid(column=1, row=0)
+
+        discription_entry_label: Label = Label(master)
+        discription_entry_label["text"] = "追加するTODO名を入力"
+        discription_entry_label["width"] = 25
+        discription_entry_label["fg"] = "black"
+        discription_entry_label["bg"] = "white"
+        discription_entry_label.grid(column=0, row=1)
+
+        self.todo_name: Entry = Entry(master)
+        self.todo_name.grid(column=1, row=1)
+
+    def apply(self):
+        todo_file_name: str = "[todo]" + self.todo_name.get() + ".txt"
+        with open(os.path.join(self.items_for_combobox[self.category.get()], todo_file_name), "w") as f:
+            pass
+

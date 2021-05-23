@@ -12,6 +12,7 @@ class Todo:
         self.rule_file = configparser.ConfigParser()
         self.rule_file.read("./config.ini", "UTF-8")
 
+        self.dir_names_items: dict = dict(self.rule_file["Dir_names"].items())
         self.dir_name_keys = list(self.rule_file["Dir_names"].keys())
         self.dir_names = [self.rule_file["Dir_names"][key] for key in self.rule_file["Dir_names"].keys()]
         self.patterns = [self.rule_file["File_names"][key] for key in self.rule_file["File_names"].keys()]
