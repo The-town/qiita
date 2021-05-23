@@ -161,6 +161,19 @@ class DialogForAddTodo(simpledialog.Dialog):
         simpledialog.Dialog.__init__(self, parent=master)
 
     def body(self, master) -> None:
+        """
+        Dialogオブジェクトへ配置するオブジェクトを定義する。
+        Todoを追加するためにユーザーが入力する情報を受け取るための、GUIオブジェクトを作成している。
+
+        Parameters
+        ----------
+        master:
+            Dialogオブジェクトの親オブジェクト
+
+        Returns
+        -------
+        None
+        """
 
         discription_combobox_label: Label = Label(master)
         discription_combobox_label["text"] = "カテゴリを選択"
@@ -185,6 +198,18 @@ class DialogForAddTodo(simpledialog.Dialog):
         self.todo_name.grid(column=1, row=1)
 
     def apply(self):
+        """
+        このDialogオブジェクトが破棄される際に実行される処理を定義する。
+        ユーザーが入力した情報をもとに、TODOファイルを指定されたディレクトリへ作成する。
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+        """
+        # todoという文字列が入っていないと、GUI上に表示されないため追加している。
         todo_file_name: str = "[todo]" + self.todo_name.get() + ".txt"
         with open(os.path.join(self.items_for_combobox[self.category.get()], todo_file_name), "w") as f:
             pass

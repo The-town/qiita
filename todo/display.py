@@ -90,6 +90,17 @@ class TodoDisplay:
         self.display_todo()
 
     def add_todo(self, event=None):
+        """
+        todoファイルを追加するためにDialogオブジェクトを呼び出す。
+
+        Parameters
+        ----------
+        event:
+
+        Returns
+        -------
+        None
+        """
         dir_names_items: dict = self.todo.dir_names_items
         DialogForAddTodo(self.root, items_for_combobox=dir_names_items)
 
