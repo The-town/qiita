@@ -5,6 +5,7 @@ import tkinter as tk
 from todo import Todo
 from gui_object import Frame, Label, Listbox, Text, Button, Combobox, DialogForAddTodo
 from flatten import flatten
+import re
 
 
 class TodoDisplay:
@@ -77,9 +78,23 @@ class TodoDisplay:
 
         return todo_information
 
-    def get_contents_to_display_which_todo_have(self, todo_information):
+    def get_contents_to_display_which_todo_have(self, todo_information) -> str:
+        """
+        Listboxへ表示するtodo名、メタデータ名を作成し返す関数
+
+        Parameters
+        ----------
+        todo_information: dict
+            todoに関する情報を格納したディクショナリ
+
+        Returns
+        -------
+        " ".join(flatten(content_list)): str
+            Listboxへ表示する文字列（todo名、メタデータ名を含む）
+        """
+
         content_list = [
-            todo_information["file_name"],
+            re.sub(r"\[.*\]", "", todo_information["file_name"]),
             todo_information["metadata_list"],
         ]
 
