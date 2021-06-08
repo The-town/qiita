@@ -19,9 +19,9 @@ class TodoDisplay:
         self.todo_list_frame = Frame(self.root)
         self.todo_list_frame.grid(column=0, row=1)
         self.todo_detail_frame = Frame(self.root)
-        self.todo_detail_frame.grid(column=0, row=3)
+        self.todo_detail_frame.grid(column=1, row=1)
         self.function_frame = Frame(self.root)
-        self.function_frame.grid(column=0, row=0)
+        self.function_frame.grid(column=0, columnspan=2, row=0)
 
         self.listbox = Listbox(master=self.todo_list_frame, master_of_detail_text=self.todo_detail_frame)
 
